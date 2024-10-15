@@ -61,4 +61,7 @@
     <Folder Include="dbo\StoredProcedures" />
     <Folder Include="dbo\Types" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\ScheduleImport.sql" />
+  </ItemGroup>
 </Project>
