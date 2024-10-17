@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[ShippingPort]
+(
+	[Id] INT NOT NULL PRIMARY KEY,
+	[PortName] NVARCHAR(255) NOT NULL
+)

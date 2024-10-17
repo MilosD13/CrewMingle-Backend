@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [dbo].[ScheduleImport]
 (
-	[CruiselineId] INT NOT NULL PRIMARY KEY,
+	
+	[CruiselineId] INT NOT NULL,
 	[Cruiseline] NVARCHAR(255) NOT NULL,
 	[ShipId] INT NOT NULL,
 	[Ship] NVARCHAR(255) NOT NULL,

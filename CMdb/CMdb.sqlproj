@@ -63,5 +63,9 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ScheduleImport.sql" />
+    <Build Include="dbo\Tables\Cruiseline.sql" />
+    <Build Include="dbo\Tables\CruiseShip.sql" />
+    <Build Include="dbo\Tables\ShipItinerary.sql" />
+    <Build Include="dbo\Tables\ShippingPort.sql" />
   </ItemGroup>
 </Project>
