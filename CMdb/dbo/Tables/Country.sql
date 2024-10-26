@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Country]
+(
+	[Id] INT NOT NULL PRIMARY KEY,
+	[Country] NVARCHAR(144) NOT NULL,
+	[Language] VARCHAR(64) NULL
+)
