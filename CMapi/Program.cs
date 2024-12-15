@@ -6,6 +6,7 @@ builder.AddStandardServices();
 //builder.AddAuthServices();
 //builder.AddHealthCheckServices();
 builder.AddCustomServices();
+builder.AddFirebaseServices();
 
 // check cors requiremnts for in production. REMOVE IN PRODUCTION
 //builder.Services.AddCors(options =>

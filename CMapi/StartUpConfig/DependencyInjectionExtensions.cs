@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using CMLibrary.DataAccess;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -49,7 +52,8 @@ public static class DependencyInjectionExtensions
 
     public static void AddCustomServices(this WebApplicationBuilder builder)
     {
-        //builder.Services.AddScoped<IUserBookCollectionData, UserBookCollectionData>();
+        builder.Services.AddScoped<ISqlDataAccess, SqlDataAccess>();
+        builder.Services.AddScoped<IUserAccountData, UserAccountData>();
         //builder.Services.AddScoped<IAccessLogData, AccessLogData>();
         //builder.Services.AddScoped<IUserAccountData, UserAccountData>();
         //builder.Services.AddScoped<IImageDataAccess, ImageDataAccess>();
@@ -81,6 +85,31 @@ public static class DependencyInjectionExtensions
                         builder.Configuration.GetValue<string>("Authentication:SecretKey")!))
                 };
             });
+
+
+    }
+
+    public static void AddFirebaseServices(this WebApplicationBuilder builder)
+    {
+        var firebaseApp = FirebaseApp.Create(new AppOptions
+        {
+            Credential = GoogleCredential.FromJson($@"
+            {{
+                ""type"": ""{builder.Configuration.GetValue<string>("Firebase:Type")}"",
+                ""project_id"": ""{builder.Configuration.GetValue<string>("Firebase:ProjectId")}"",
+                ""private_key_id"": ""{builder.Configuration.GetValue<string>("Firebase:PrivateKeyId")}"",
+                ""private_key"": ""{builder.Configuration.GetValue<string>("Firebase:PrivateKey")}"",
+                ""client_email"": ""{builder.Configuration.GetValue<string>("Firebase:ClientEmail")}"",
+                ""client_id"": ""{builder.Configuration.GetValue<string>("Firebase:ClientId")}"",
+                ""auth_uri"": ""{builder.Configuration.GetValue<string>("Firebase:AuthUri")}"",
+                ""token_uri"": ""{builder.Configuration.GetValue<string>("Firebase:TokenUri")}"",
+                ""auth_provider_x509_cert_url"": ""{builder.Configuration.GetValue<string>("Firebase:AuthProviderX509CertUrl")}"",
+                ""client_x509_cert_url"": ""{builder.Configuration.GetValue<string>("Firebase:ClientX509CertUrl")}"",
+                ""universe_domain"": ""{builder.Configuration.GetValue<string>("Firebase:UniverseDomain")}""
+            }}")
+        });
+
+        builder.Services.AddSingleton(firebaseApp);
     }
 
     //public static void AddHealthCheckServices(this WebApplicationBuilder builder)
