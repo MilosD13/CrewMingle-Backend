@@ -1,6 +1,8 @@
-﻿using CMLibrary.DataAccess;
+﻿using CMapi.Authentication;
+using CMLibrary.DataAccess;
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -68,23 +70,29 @@ public static class DependencyInjectionExtensions
                 .Build();
         });
 
-        builder.Services.AddAuthentication("Bearer")
-            .AddJwtBearer(opts =>
-            {
-                opts.TokenValidationParameters = new()
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero,
-                    ValidIssuer = builder.Configuration.GetValue<string>("Authentication:Issuer"),
-                    ValidAudience = builder.Configuration.GetValue<string>("Authentication:Audience"),
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(
-                        builder.Configuration.GetValue<string>("Authentication:SecretKey")!))
-                };
-            });
+        //builder.Services.AddAuthentication("Bearer")
+        //    .AddJwtBearer(opts =>
+        //    {
+        //        opts.TokenValidationParameters = new()
+        //        {
+        //            ValidateIssuer = true,
+        //            ValidateAudience = true,
+        //            ValidateIssuerSigningKey = true,
+        //            ValidateLifetime = true,
+        //            ClockSkew = TimeSpan.Zero,
+        //            ValidIssuer = builder.Configuration.GetValue<string>("Authentication:Issuer"),
+        //            ValidAudience = builder.Configuration.GetValue<string>("Authentication:Audience"),
+        //            IssuerSigningKey = new SymmetricSecurityKey(
+        //                Encoding.ASCII.GetBytes(
+        //                builder.Configuration.GetValue<string>("Authentication:SecretKey")!))
+        //        };
+        //    });
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = "Firebase";
+            options.DefaultChallengeScheme = "Firebase";
+        })
+            .AddScheme<AuthenticationSchemeOptions, FirebaseAuthenticationHandler>("Firebase", null);
 
 
     }

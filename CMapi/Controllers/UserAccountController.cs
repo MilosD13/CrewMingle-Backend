@@ -3,7 +3,8 @@ using FirebaseAdmin.Auth;
 using FirebaseAdmin;
 using CMLibrary.Models;
 using CMLibrary.DataAccess;
-
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace CMapi.Controllers;
@@ -21,22 +22,24 @@ public class UserAccountController : ControllerBase
         _userData = userData;
     }
 
-    // GET: api/<UserAccountController>
-    [HttpGet]
-    public IEnumerable<string> Get()
-    {
-        return new string[] { "value1", "value2" };
-    }
-
     [HttpPost("login-register")]
-    public async Task<IActionResult> LoginRegister(string idToken)
+    public async Task<IActionResult> LoginRegister()
     {
-        UserFirebaseModel user = await CheckAccountStatus(idToken);
-        if (user== null)
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+        UserFirebaseModel user = new UserFirebaseModel
+        {
+            UserId = userId,
+            Email = email
+        };
+
+        //UserFirebaseModel? user = await CheckAccountStatus();
+        if (user == null || userId == null )
         {
             return Unauthorized();
         }
-        var userAccount = await _userData.VerifyUserAccount(user);
+        var userAccount = await _userData.VerifyUserAccount(user)!;
 
         if (userAccount == null)
         {
@@ -44,29 +47,6 @@ public class UserAccountController : ControllerBase
         }
 
         return Ok(userAccount);
-
-    }
-    private async Task<UserFirebaseModel>? CheckAccountStatus(string idToken)
-    {
-        try
-        {
-            var firebaseAuth = FirebaseAuth.GetAuth(_firebaseApp);
-            var decodedToken = await firebaseAuth.VerifyIdTokenAsync(idToken);
-
-            var emailDecoded = decodedToken.Claims.TryGetValue("email", out var email) ? email : null;
-
-            UserFirebaseModel user = new UserFirebaseModel
-            {
-                UserId = decodedToken.Uid,
-                Email = emailDecoded.ToString()
-            };
-
-            return user;
-        }
-        catch (Exception ex)
-        {
-            return null;
-        }
     }
 
 }

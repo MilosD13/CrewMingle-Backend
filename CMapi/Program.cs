@@ -1,10 +1,14 @@
 using CMapi.StartUpConfig;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 builder.AddStandardServices();
-//builder.AddAuthServices();
 //builder.AddHealthCheckServices();
+builder.AddAuthServices();
 builder.AddCustomServices();
 builder.AddFirebaseServices();
 
@@ -28,6 +32,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 
