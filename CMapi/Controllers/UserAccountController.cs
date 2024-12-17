@@ -13,12 +13,10 @@ namespace CMapi.Controllers;
 [ApiController]
 public class UserAccountController : ControllerBase
 {
-    private readonly FirebaseApp _firebaseApp;
     private readonly IUserAccountData _userData;
 
-    public UserAccountController(FirebaseApp firebaseApp, IUserAccountData userData)
+    public UserAccountController(IUserAccountData userData)
     {
-        _firebaseApp = firebaseApp;
         _userData = userData;
     }
 
@@ -33,8 +31,7 @@ public class UserAccountController : ControllerBase
             UserId = userId,
             Email = email
         };
-
-        //UserFirebaseModel? user = await CheckAccountStatus();
+        
         if (user == null || userId == null )
         {
             return Unauthorized();

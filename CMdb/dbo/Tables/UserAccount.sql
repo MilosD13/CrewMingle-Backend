@@ -6,5 +6,6 @@
 	[Email] nvarchar(255) NOT NULL,
 	[DisplayName] nvarchar(255) NULL,
 	[AccountTypeId] UNIQUEIDENTIFIER NOT NULL,
-	[IsDeleted] BIT NOT NULL DEFAULT 0
+	[IsDeleted] BIT NOT NULL DEFAULT 0,
+	[ProfileImage] VARBINARY(MAX) NULL
 )

@@ -7,7 +7,7 @@ AS
 BEGIN
 
 
-	SELECT u.Id, u.CreatedDate, u.UserId, Email, AccountTypeId, t.AccountType, r.Roles [RoleString], u.IsDeleted
+	SELECT u.Id, u.CreatedDate, u.UserId, Email, AccountTypeId, t.AccountType, r.Roles [RoleString], u.IsDeleted, u.ProfileImage
 
     FROM 
     [dbo].[UserAccount] u
