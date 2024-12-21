@@ -78,5 +78,9 @@
     <Build Include="dbo\Tables\CrewJoinDetails.sql" />
     <Build Include="dbo\StoredProcedures\spCrew_CreateConnectionRequest.sql" />
     <Build Include="dbo\StoredProcedures\spCrew_EditConnectionRequest.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetCrewList.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetCrewBlockList.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetCrewPendingRequested.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetSingleCrew.sql" />
   </ItemGroup>
 </Project>

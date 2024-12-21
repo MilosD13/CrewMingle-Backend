@@ -59,4 +59,58 @@ public class CrewDataAccess : ICrewDataAccess
         }
     }
 
+    public async Task<IEnumerable<CrewModel>> GetActiveCrew(string userId, int pageNumber = 1, int pageSize = 10)
+    {
+        var crew  = await _sql.LoadData<CrewModel, dynamic>(
+            "dbo.spCrew_GetCrewList",
+            new
+            {
+                UserId = userId,
+                PageNUmber = pageNumber,
+                PageSize = pageSize
+            },
+            "Default");
+        
+        return crew;
+    }
+    public async Task<CrewModel?> GetSingleActiveCrew(string userId)
+    {
+        var crew = await _sql.LoadData<CrewModel, dynamic>(
+            "dbo.spCrew_GetSingleCrew",
+            new
+            {
+                UserId = userId
+            },
+            "Default");
+
+        return crew.FirstOrDefault();
+    }
+    public async Task<IEnumerable<CrewModel>> GetPendingCrew(string userId, int pageNumber = 1, int pageSize = 10)
+    {
+        var crew = await _sql.LoadData<CrewModel, dynamic>(
+            "dbo.spCrew_GetCrewPendingRequested",
+            new
+            {
+                UserId = userId,
+                PageNUmber = pageNumber,
+                PageSize = pageSize
+            },
+            "Default");
+
+        return crew;
+    }
+    public async Task<IEnumerable<CrewModel>> GetBlockedCrew(string userId, int pageNumber = 1, int pageSize = 10)
+    {
+        var crew = await _sql.LoadData<CrewModel, dynamic>(
+            "dbo.spCrew_GetCrewBlockList",
+            new
+            {
+                UserId = userId,
+                PageNUmber = pageNumber,
+                PageSize = pageSize
+            },
+            "Default");
+
+        return crew;
+    }
 }
