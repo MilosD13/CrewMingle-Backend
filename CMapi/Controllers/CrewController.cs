@@ -87,9 +87,30 @@ namespace CMapi.Controllers
         }
 
         //// DELETE api/<CrewController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        [HttpDelete("delete-crew")]
+        public async Task<IActionResult> DeleteCrew([FromBody] CrewEditModel crew)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            UserFirebaseModel user = new UserFirebaseModel
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            if (user == null || userId == null)
+            {
+                return Unauthorized();
+            }
+            crew.Status = "DELETED";
+            var success = await _crewData.EditCrew(userId, crew);
+            if (!success)
+            {
+                return StatusCode(500, "Failed to modify crew connection.");
+            }
+
+            return Ok("Crew connection deleted successfully.");
+        }
     }
 }
