@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[spCrew_CreateConnectionRequest]
-	@requesterId UNIQUEIDENTIFIER,
-	@requesteeid UNIQUEIDENTIFIER
+	@RequesterId UNIQUEIDENTIFIER,
+	@Requesteeid UNIQUEIDENTIFIER
 
 AS
 
@@ -11,9 +11,9 @@ BEGIN
 	INSERT INTO 
 
 	[dbo].[CrewJoin]([Id], [CreatedByCrewId], [IsDeleted], [IsBlocked])
-	VALUES (@RequestId, @requesterId, 0, 0);
+	VALUES (@RequestId, @RequesterId, 0, 0);
 
 	INSERT INTO [dbo].[CrewJoinDetails] ([CrewJoinId], [CrewId], [Status])
-	VALUES (@RequestId, @requesterId, 'REQUESTED'),
-			(@RequestId, @requesteeid, 'PENDING');
+	VALUES (@RequestId, @RequesterId, 'REQUESTED'),
+			(@RequestId, @Requesteeid, 'PENDING');
 END
