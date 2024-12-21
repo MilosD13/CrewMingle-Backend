@@ -56,9 +56,7 @@ public static class DependencyInjectionExtensions
     {
         builder.Services.AddScoped<ISqlDataAccess, SqlDataAccess>();
         builder.Services.AddScoped<IUserAccountData, UserAccountData>();
-        //builder.Services.AddScoped<IAccessLogData, AccessLogData>();
-        //builder.Services.AddScoped<IUserAccountData, UserAccountData>();
-        //builder.Services.AddScoped<IImageDataAccess, ImageDataAccess>();
+        builder.Services.AddScoped<ICrewDataAccess, CrewDataAccess>();
     }
 
     public static void AddAuthServices(this WebApplicationBuilder builder)

@@ -4,7 +4,7 @@ using CMLibrary.Models;
 
 namespace CMLibrary.DataAccess;
 
-public class CrewDataAccess
+public class CrewDataAccess : ICrewDataAccess
 {
     private readonly ISqlDataAccess _sql;
     public CrewDataAccess(ISqlDataAccess sql)
@@ -12,36 +12,51 @@ public class CrewDataAccess
         _sql = sql;
     }
 
-    private async Task AddCrew(Guid requesterId, Guid requesteeid)
+    public async Task<bool> AddCrew(string requesterId, Guid requesteeid)
     {
-        await _sql.SaveData<dynamic>(
-            "dbo.spCrew_CreateConnectionRequest",
-            new
-            {
-                RequesterId = requesterId,
-                Requesteeid = requesteeid
-            },
-            "Default");
+        try
+        {
+            await _sql.SaveData<dynamic>(
+                "dbo.spCrew_CreateConnectionRequest",
+                new
+                {
+                    RequesterId = requesterId,
+                    Requesteeid = requesteeid
+                },
+                "Default");
 
-        return;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
     }
 
-    private async Task EditCrew(Guid requesterId, Guid requesteeid, string status)
+
+    public async Task<bool> EditCrew(string userId, CrewEditModel crew)
     {
         /*
          * Can Accept, Reject, Block, Cancel crew connections / requests
          * */
-        
-        await _sql.SaveData<dynamic>(
-            "dbo.spCrew_EditConnectionRequest",
-            new
-            {
-                RequesterId = requesterId,
-                Requesteeid = requesteeid,
-                Status = status
-            },
-            "Default");
+        try
+        {
+            await _sql.SaveData<dynamic>(
+                "dbo.spCrew_EditConnectionRequest",
+                new
+                {
+                    UserId = userId,
+                    crew.CrewId,
+                    crew.Status 
+                },
+                "Default");
 
-        return;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
     }
+
 }
