@@ -40,14 +40,14 @@ BEGIN
 			AND cj.IsDeleted <> 1 -- NOT cancelled (deleted) / rejected
 			AND cj.IsActive = 0 -- pending / requested
 
-			AND (cj.CreatedByCrewId = @UserId OR cjdc.CrewId = @UserId)
+			AND (cj.CreatedByCrewId = @UserDbId OR cjdc.CrewId = @UserDbId)
 
 		)
 
 	SELECT 
 		@TotalRecords AS TotalRecords,
 		CEILING(@TotalRecords * 1.0 / @PageSize) AS TotalPages,
-		@PageNumber AS CurrentPage,
+		@PageNumber AS PageNumber,
 		@PageSize AS PageSize,
 		Results.*
 	FROM PaginatedResults Results

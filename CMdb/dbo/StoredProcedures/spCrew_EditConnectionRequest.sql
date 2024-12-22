@@ -10,7 +10,7 @@ BEGIN
 
 	DECLARE @UserDbId UNIQUEIDENTIFIER = (SELECT [Id] FROM [dbo].[UserAccount] WHERE [UserId] = @UserId )
 
-	DECLARE @RequestId UNIQUEIDENTIFIER = (SELECT  cj.id  FROM [dbo].[CrewJoin] cj
+	DECLARE @RequestId UNIQUEIDENTIFIER = (SELECT  cj.Id  FROM [dbo].[CrewJoin] cj
 												LEFT JOIN [dbo].[CrewJoinDetails] cjd ON cjd.CrewJoinId = cj.Id AND cjd.CrewId <> cj.CreatedByCrewId
 												LEFT JOIN [dbo].[CrewJoinDetails] cjdc ON cjdc.CrewJoinId = cj.Id AND cjdc.CrewId = cj.CreatedByCrewId
 												WHERE cjd.CrewId IN (@UserDbId, @Crewid) AND cjdc.CrewId IN (@UserDbId, @Crewid))

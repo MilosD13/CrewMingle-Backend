@@ -2,7 +2,7 @@
 
 namespace CMLibrary.Models;
 
-public class CrewModel
+public class CrewDatabaseModel
 {
     public DateTime LastUpdatedDate { get; set; }
     public Guid CrewId { get; set; } = Guid.NewGuid();
@@ -15,7 +15,7 @@ public class CrewModel
     // ** PAGINATION ** //
     public int TotalRecords { get; set; } = 0;
     public int TotalPages { get; set; } = int.MaxValue;
-    public int CurrentPage { get; set; } = 1;
+    public int PageNumber { get; set; } = 1;
     public int PageSize {  get; set; } = int.MaxValue;
     public int RowNum { get; set; } = int.MaxValue;
 }

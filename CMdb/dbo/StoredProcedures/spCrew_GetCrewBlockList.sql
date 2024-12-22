@@ -44,7 +44,7 @@ BEGIN
 	SELECT 
 		@TotalRecords AS TotalRecords,
 		CEILING(@TotalRecords * 1.0 / @PageSize) AS TotalPages,
-		@PageNumber AS CurrentPage,
+		@PageNumber AS PageNumber,
 		@PageSize AS PageSize,
 		Results.*
 	FROM PaginatedResults Results

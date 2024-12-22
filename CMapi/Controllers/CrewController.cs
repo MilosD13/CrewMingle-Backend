@@ -18,21 +18,123 @@ namespace CMapi.Controllers
             _crewData = crewData;
         }
 
-        // GET: api/<CrewController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
+        [HttpGet("active-crew")]
+        public async Task<ActionResult<List<CrewResultsModel>>> GetCrew (int pageNumber = 1, int pageSize = 10)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
 
-        //// GET api/<CrewController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
+            UserFirebaseModel user = new UserFirebaseModel
+            {
+                UserId = userId,
+                Email = email
+            };
 
-        
+            if (user == null || userId == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var crew = await _crewData.GetActiveCrew(userId, pageNumber, pageSize);
+
+                return Ok(crew);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("There was an issue with your request");
+            }
+        }
+
+        [HttpGet("active-crew/{crewId}")]
+        public async Task<ActionResult<CrewResultsModel>> GetSingleCrew(Guid crewId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            UserFirebaseModel user = new UserFirebaseModel
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            if (user == null || userId == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var crew = await _crewData.GetSingleActiveCrew(userId, crewId);
+
+                return Ok(crew);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("There was an issue with your request");
+            }
+        }
+
+        [HttpGet("pending-crew")]
+        public async Task<ActionResult<CrewResultsModel>> GetPendingCrew(int pageNumber = 1, int pageSize = 10)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            UserFirebaseModel user = new UserFirebaseModel
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            if (user == null || userId == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var crew = await _crewData.GetPendingCrew(userId, pageNumber, pageSize);
+
+                return Ok(crew);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("There was an issue with your request");
+            }
+        }
+
+        [HttpGet("blocked-crew")]
+        public async Task<ActionResult<CrewResultsModel>> GetBlockedCrew(int pageNumber = 1, int pageSize = 10)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            UserFirebaseModel user = new UserFirebaseModel
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            if (user == null || userId == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var crew = await _crewData.GetBlockedCrew(userId, pageNumber, pageSize);
+
+                return Ok(crew);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("There was an issue with your request");
+            }
+        }
+
+
         [HttpPost("add-crew")]
         public async Task<IActionResult> AddCrew([FromBody] Guid crewId)
         {

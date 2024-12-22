@@ -59,58 +59,125 @@ public class CrewDataAccess : ICrewDataAccess
         }
     }
 
-    public async Task<IEnumerable<CrewModel>> GetActiveCrew(string userId, int pageNumber = 1, int pageSize = 10)
+    public async Task<CrewResultsModel> GetActiveCrew(string userId, int pageNumber = 1, int pageSize = 10)
     {
-        var crew  = await _sql.LoadData<CrewModel, dynamic>(
+        var crew  = await _sql.LoadData<CrewDatabaseModel, dynamic>(
             "dbo.spCrew_GetCrewList",
             new
             {
                 UserId = userId,
-                PageNUmber = pageNumber,
+                PageNumber = pageNumber,
                 PageSize = pageSize
             },
             "Default");
-        
-        return crew;
+
+        CrewResultsModel results = GetReturnResults(crew.ToList());
+
+        return results;
     }
-    public async Task<CrewModel?> GetSingleActiveCrew(string userId)
+    public async Task<CrewResultsModel> GetSingleActiveCrew(string userId, Guid crewId)
     {
-        var crew = await _sql.LoadData<CrewModel, dynamic>(
+        var crew = await _sql.LoadData<CrewDatabaseModel, dynamic>(
             "dbo.spCrew_GetSingleCrew",
             new
             {
-                UserId = userId
+                UserId = userId,
+                CrewId = crewId
             },
             "Default");
 
-        return crew.FirstOrDefault();
+        CrewResultsModel results = GetReturnResults(crew.ToList());
+
+        return results;
     }
-    public async Task<IEnumerable<CrewModel>> GetPendingCrew(string userId, int pageNumber = 1, int pageSize = 10)
+    public async Task<CrewResultsModel> GetPendingCrew(string userId, int pageNumber = 1, int pageSize = 10)
     {
-        var crew = await _sql.LoadData<CrewModel, dynamic>(
+        var crew = await _sql.LoadData<CrewDatabaseModel, dynamic>(
             "dbo.spCrew_GetCrewPendingRequested",
             new
             {
                 UserId = userId,
-                PageNUmber = pageNumber,
+                PageNumber = pageNumber,
                 PageSize = pageSize
             },
             "Default");
 
-        return crew;
+        CrewResultsModel results = GetReturnResults(crew.ToList());
+
+        return results;
     }
-    public async Task<IEnumerable<CrewModel>> GetBlockedCrew(string userId, int pageNumber = 1, int pageSize = 10)
+    public async Task<CrewResultsModel> GetBlockedCrew(string userId, int pageNumber = 1, int pageSize = 10)
     {
-        var crew = await _sql.LoadData<CrewModel, dynamic>(
+        var crew = await _sql.LoadData<CrewDatabaseModel, dynamic>(
             "dbo.spCrew_GetCrewBlockList",
             new
             {
                 UserId = userId,
-                PageNUmber = pageNumber,
+                PageNumber = pageNumber,
                 PageSize = pageSize
             },
             "Default");
 
-        return crew;
+        CrewResultsModel results = GetReturnResults(crew.ToList());
+
+        return results;
+    }
+
+    private CrewResultsModel GetReturnResults(List<CrewDatabaseModel> dataResults)
+    {
+        List<CrewDataModel> dataModel = new List<CrewDataModel>();
+
+        foreach (var crew_data in dataResults)
+        {
+            CrewDataModel crewDataModel = new CrewDataModel
+            {
+                LastUpdatedDate = crew_data.LastUpdatedDate,
+                CrewId = crew_data.CrewId,
+                Email = crew_data.Email,
+                DisplayName = crew_data.DisplayName,
+                ProfileImage = crew_data.ProfileImage,
+                Status = crew_data.Status,
+                RowNum = crew_data.RowNum
+            };
+            dataModel.Add(crewDataModel);
+        }
+
+        if (dataResults.Count() > 0)
+        {
+            var firstRecord = dataResults.FirstOrDefault();
+
+            CrewMetaModel meta = new CrewMetaModel
+            {
+                PageNumber = firstRecord.PageNumber,
+                TotalRecords = firstRecord.TotalRecords,
+                TotalPages = firstRecord.TotalPages,
+                PageSize  = firstRecord.PageSize
+            };
+
+            CrewResultsModel results = new CrewResultsModel
+            {
+                Meta = meta,
+                Data = dataModel
+            };
+
+            return results;
+        }
+        else
+        {
+            CrewMetaModel meta = new CrewMetaModel
+            {
+                PageNumber = 1,
+                TotalRecords = 0,
+                TotalPages = 0,
+                PageSize = 0
+            };
+            CrewResultsModel results = new CrewResultsModel
+            {
+                Meta = meta,
+                Data = dataModel
+            };
+
+            return results;
+        }
     }
 }
