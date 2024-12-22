@@ -74,5 +74,13 @@
     <Build Include="dbo\Tables\UserAccountRoles.sql" />
     <Build Include="dbo\StoredProcedures\spUserAccount_GetAccount.sql" />
     <Build Include="dbo\StoredProcedures\spUserAccount_CreateUserAccount.sql" />
+    <Build Include="dbo\Tables\CrewJoin.sql" />
+    <Build Include="dbo\Tables\CrewJoinDetails.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_CreateConnectionRequest.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_EditConnectionRequest.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetCrewList.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetCrewBlockList.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetCrewPendingRequested.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetSingleCrew.sql" />
   </ItemGroup>
 </Project>

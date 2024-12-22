@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[CrewJoin]
+(
+	[Id] UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+	[CreatedDate] datetime2(7) NOT NULL DEFAULT GETUTCDATE(),
+	[LastUpdatedDate] datetime2(7) NOT NULL DEFAULT GETUTCDATE(),
+	[CreatedByCrewId] UNIQUEIDENTIFIER NOT NULL,
+	[IsActive] BIT DEFAULT 0,
+	[IsDeleted] BIT DEFAULT 0,
+	[IsBlocked] BIT DEFAULT 0
+)
