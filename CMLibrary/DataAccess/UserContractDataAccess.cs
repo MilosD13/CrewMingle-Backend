@@ -10,7 +10,7 @@ public class UserContractDataAccess : IUserContractDataAccess
         _sql = sql;
     }
 
-    public async Task<Guid?> CreateContract(UserContractModel model)
+    public async Task<Guid?> CreateContract(UserContractModel model, string firebaseId)
     {
         try
         {
@@ -18,7 +18,7 @@ public class UserContractDataAccess : IUserContractDataAccess
                 "dbo.spUserContract_Insert",
                 new
                 {
-                    UserAccountId = model.UserAccountId,
+                    FirebaseId = firebaseId,
                     ShipId = model.ShipId,
                     StartDate = model.StartDate,
                     EndDate = model.EndDate
@@ -53,26 +53,7 @@ public class UserContractDataAccess : IUserContractDataAccess
         }
     }
 
-    public async Task<List<UserContractModel>> GetAllContracts()
-    {
-        try
-        {
-            var result = await _sql.LoadData<UserContractModel, dynamic>(
-                "dbo.spUserContract_GetAll",
-                new { },
-                "Default"
-            );
-
-            return result.ToList();
-        }
-        catch
-        {
-            // Log error
-            return new List<UserContractModel>();
-        }
-    }
-
-    public async Task<List<UserContractModel>> GetContractsByUser(Guid userAccountId, int pageNumber = 1, int pageSize = 10)
+    public async Task<List<UserContractModel>> GetContractsByUser(string firebaseId, int pageNumber = 1, int pageSize = 10)
     {
         try
         {
@@ -80,7 +61,7 @@ public class UserContractDataAccess : IUserContractDataAccess
                 "dbo.spUserContract_GetAllByUserId",
                 new
                 {
-                    UserAccountId = userAccountId,
+                    FirebaseId = firebaseId,
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 },
@@ -96,7 +77,7 @@ public class UserContractDataAccess : IUserContractDataAccess
         }
     }
 
-    public async Task<bool> UpdateContract(UserContractModel model)
+    public async Task<bool> UpdateContract(UserContractModel model, string firebaseId)
     {
         try
         {
@@ -105,7 +86,7 @@ public class UserContractDataAccess : IUserContractDataAccess
                 new
                 {
                     ContractId = model.Id,
-                    UserAccountId = model.UserAccountId,
+                    FirebaseId = firebaseId,
                     ShipId = model.ShipId,
                     StartDate = model.StartDate,
                     EndDate = model.EndDate
@@ -122,13 +103,13 @@ public class UserContractDataAccess : IUserContractDataAccess
         }
     }
 
-    public async Task<bool> SoftDeleteContract(Guid contractId)
+    public async Task<bool> SoftDeleteContract(Guid contractId, string firebaseId)
     {
         try
         {
             await _sql.SaveData<dynamic>(
                 "dbo.spUserContract_SoftDelete",
-                new { ContractId = contractId },
+                new { ContractId = contractId, FirebaseId = firebaseId},
                 "Default"
             );
 

@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [dbo].[spUserContract_Insert]
-    @UserAccountId UNIQUEIDENTIFIER,
+    @FirebaseId NVARCHAR(255),
     @ShipId INT,
     @StartDate DATETIME2(7),
     @EndDate DATETIME2(7)
@@ -7,6 +7,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    DECLARE @UserAccountId UNIQUEIDENTIFIER = (SELECT [Id] FROM [dbo].[UserAccount] WHERE [UserId] = @FirebaseId )
     DECLARE @NewId UNIQUEIDENTIFIER = NEWID();
 
     INSERT INTO [dbo].[UserContract]

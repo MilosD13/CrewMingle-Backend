@@ -1,10 +1,14 @@
 ﻿CREATE PROCEDURE [dbo].[spUserContract_SoftDelete]
-    @ContractId UNIQUEIDENTIFIER
+    @ContractId UNIQUEIDENTIFIER,
+    @FirebaseId NVARCHAR(255)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE [dbo].[UserContract]
+    DECLARE @UserAccountId UNIQUEIDENTIFIER = (SELECT [Id] FROM [dbo].[UserAccount] WHERE [UserId] = @FirebaseId )
+
+    UPDATE [dbo].[UserContract] 
     SET [IsDeleted] = 1
-    WHERE [Id] = @ContractId;
+    WHERE [Id] = @ContractId
+    AND UserAccountId = @UserAccountId;
 END

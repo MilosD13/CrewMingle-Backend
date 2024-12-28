@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CMLibrary.DataAccess;
 using CMLibrary.Models;
+using System.Security.Claims;
 
 namespace CMapi.Controllers;
 
@@ -18,10 +19,24 @@ public class UserContractController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> Create(UserContractModel model)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+        UserFirebaseModel user = new UserFirebaseModel
+        {
+            UserId = userId,
+            Email = email
+        };
+
+        if (user == null || userId == null)
+        {
+            return Unauthorized();
+        }
+
         if (model == null)
             return BadRequest("Invalid model.");
 
-        var newId = await _userContractData.CreateContract(model);
+        var newId = await _userContractData.CreateContract(model, userId);
 
         if (newId.HasValue && newId != Guid.Empty)
         {
@@ -45,16 +60,44 @@ public class UserContractController : ControllerBase
     }
 
     [HttpGet("get-all-contracts")]
-    public async Task<ActionResult<List<UserContractModel>>> GetContractsByUser(Guid userAccountId, int pageNumber = 1, int pageSize = 10)
+    public async Task<ActionResult<List<UserContractModel>>> GetContractsByUser(int pageNumber = 1, int pageSize = 10)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+        UserFirebaseModel user = new UserFirebaseModel
+        {
+            UserId = userId,
+            Email = email
+        };
+
+        if (user == null || userId == null)
+        {
+            return Unauthorized();
+        }
+
         // Optionally, we can cross-check with the user's token if needed
-        var contracts = await _userContractData.GetContractsByUser(userAccountId, pageNumber, pageSize);
+        var contracts = await _userContractData.GetContractsByUser(userId, pageNumber, pageSize);
         return Ok(contracts);
     }
 
     [HttpPut("update-contract")]
     public async Task<IActionResult> Update(UserContractModel model)
     {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+        UserFirebaseModel user = new UserFirebaseModel
+        {
+            UserId = userId,
+            Email = email
+        };
+
+        if (user == null || userId == null)
+        {
+            return Unauthorized();
+        }
+
         // Validate model
         if (model == null)
         {
@@ -66,7 +109,7 @@ public class UserContractController : ControllerBase
             return BadRequest("Invalid contract ID.");
         }
 
-        var success = await _userContractData.UpdateContract(model);
+        var success = await _userContractData.UpdateContract(model, userId);
 
         if (!success)
         {
@@ -79,7 +122,21 @@ public class UserContractController : ControllerBase
     [HttpDelete(template: "delete-contract")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var success = await _userContractData.SoftDeleteContract(id);
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+        UserFirebaseModel user = new UserFirebaseModel
+        {
+            UserId = userId,
+            Email = email
+        };
+
+        if (user == null || userId == null)
+        {
+            return Unauthorized();
+        }
+
+        var success = await _userContractData.SoftDeleteContract(id, userId);
 
         if (!success)
             return StatusCode(StatusCodes.Status500InternalServerError, "Failed to delete contract.");
