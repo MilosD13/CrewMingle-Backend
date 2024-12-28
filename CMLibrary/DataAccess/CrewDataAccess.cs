@@ -124,6 +124,44 @@ public class CrewDataAccess : ICrewDataAccess
         return results;
     }
 
+
+    public async Task<CrewShipResultsModel> GetCrewOnShip(string userId, int shipId, DateTime startDate , DateTime endDate, int pageNumber = 1, int pageSize = 10)
+    {
+        var crew = await _sql.LoadData<CrewShipDataModel, dynamic>(
+            "dbo.spCrew_GetCrewByShip",
+            new
+            {
+                UserId = userId,
+                ShipId = shipId,
+                StartDate = startDate,
+                EndDate = endDate,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            },
+            "Default");
+
+        CrewShipResultsModel results = GetShipReturnResults(crew.ToList());
+
+        return results;
+    }
+
+    public async Task<CrewShipResultsModel> GetCrewShips(string userId, int pageNumber = 1, int pageSize = 10)
+    {
+        var crew = await _sql.LoadData<CrewShipDataModel, dynamic>(
+            "dbo.spCrew_GetCrewShips",
+            new
+            {
+                UserId = userId,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            },
+            "Default");
+
+        CrewShipResultsModel results = GetShipReturnResults(crew.ToList());
+
+        return results;
+    }
+
     private CrewResultsModel GetReturnResults(List<CrewDatabaseModel> dataResults)
     {
         List<CrewDataModel> dataModel = new List<CrewDataModel>();
@@ -173,6 +211,66 @@ public class CrewDataAccess : ICrewDataAccess
                 PageSize = 0
             };
             CrewResultsModel results = new CrewResultsModel
+            {
+                Meta = meta,
+                Data = dataModel
+            };
+
+            return results;
+        }
+    }
+
+    private CrewShipResultsModel GetShipReturnResults(List<CrewShipDataModel> dataResults)
+    {
+        List<CrewShipModel> dataModel = new List<CrewShipModel>();
+
+        foreach (var crew_data in dataResults)
+        {
+            CrewShipModel crewDataModel = new CrewShipModel
+            {
+                CrewId = crew_data.CrewId,
+                DisplayName = crew_data.DisplayName,
+                ProfileImage = crew_data.ProfileImage,
+                RowNum = crew_data.RowNum,
+                Cruiseline = crew_data.Cruiseline,
+                ShipName = crew_data.ShipName,
+                StartDate = crew_data.StartDate,
+                EndDate = crew_data.EndDate
+            };
+            dataModel.Add(crewDataModel);
+
+}
+
+        if (dataResults.Count() > 0)
+        {
+            var firstRecord = dataResults.FirstOrDefault();
+
+            CrewMetaModel meta = new CrewMetaModel
+            {
+                PageNumber = firstRecord.PageNumber,
+                TotalRecords = firstRecord.TotalRecords,
+                TotalPages = firstRecord.TotalPages,
+                PageSize = firstRecord.PageSize
+            };
+
+            CrewShipResultsModel results = new CrewShipResultsModel
+            {
+                Meta = meta,
+                Data = dataModel
+            };
+
+            return results;
+        }
+        else
+        {
+            CrewMetaModel meta = new CrewMetaModel
+            {
+                PageNumber = 1,
+                TotalRecords = 0,
+                TotalPages = 0,
+                PageSize = 0
+            };
+            CrewShipResultsModel results = new CrewShipResultsModel
             {
                 Meta = meta,
                 Data = dataModel
