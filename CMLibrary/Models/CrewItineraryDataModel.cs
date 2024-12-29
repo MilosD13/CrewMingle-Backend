@@ -4,7 +4,7 @@ namespace CMLibrary.Models;
 
 public class CrewItineraryDataModel
 {
-    public Guid CrewId { get; set; } = Guid.NewGuid();
+    public Guid CrewId { get; set; } = Guid.Empty;
     public string? ProfileImage { get; set; } = string.Empty;
     public string? DisplayName { get; set; } = string.Empty;
     public string Cruiseline { get; set; } = string.Empty;
