@@ -88,5 +88,7 @@
     <Build Include="dbo\StoredProcedures\spUserContract_Update.sql" />
     <Build Include="dbo\StoredProcedures\spUserContract_SoftDelete.sql" />
     <Build Include="dbo\StoredProcedures\spUserContract_GetAllByUserId.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetCrewByShip.sql" />
+    <Build Include="dbo\StoredProcedures\spCrew_GetCrewShips.sql" />
   </ItemGroup>
 </Project>

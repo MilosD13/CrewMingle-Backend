@@ -134,6 +134,63 @@ namespace CMapi.Controllers
             }
         }
 
+        [HttpGet("crew-by-ship")]
+        public async Task<ActionResult<CrewShipResultsModel>> GetCrewByShip(int shipId, DateTime startDate, DateTime endDate,  int pageNumber = 1, int pageSize = 10)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            UserFirebaseModel user = new UserFirebaseModel
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            if (user == null || userId == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var crew = await _crewData.GetCrewOnShip(userId, shipId, startDate, endDate, pageNumber, pageSize);
+
+                return Ok(crew);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("There was an issue with your request");
+            }
+        }
+
+        [HttpGet("crew-ships")]
+        public async Task<ActionResult<CrewShipResultsModel>> GetCrewShips(int pageNumber = 1, int pageSize = 10)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            UserFirebaseModel user = new UserFirebaseModel
+            {
+                UserId = userId,
+                Email = email
+            };
+
+            if (user == null || userId == null)
+            {
+                return Unauthorized();
+            }
+
+            try
+            {
+                var crew = await _crewData.GetCrewShips(userId, pageNumber, pageSize);
+
+                return Ok(crew);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("There was an issue with your request");
+            }
+        }
 
         [HttpPost("add-crew")]
         public async Task<IActionResult> AddCrew([FromBody] Guid crewId)
