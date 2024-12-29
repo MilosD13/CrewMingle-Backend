@@ -86,22 +86,42 @@ public class PortDataAccess : IPortDataAccess
             };
             dataModel.Add(crewDataModel);
         }
-        var firstRecord = dataResults.FirstOrDefault();
-        CrewMetaModel meta = new CrewMetaModel
+
+        if (dataResults.Count() > 0)
+        { 
+            var firstRecord = dataResults.FirstOrDefault();
+            CrewMetaModel meta = new CrewMetaModel
+            {
+                PageNumber = firstRecord.PageNumber,
+                TotalRecords = firstRecord.TotalRecords,
+                TotalPages = firstRecord.TotalPages,
+                PageSize = firstRecord.PageSize
+            };
+
+            CrewScheduleResultsModel results = new CrewScheduleResultsModel
+            {
+                Meta = meta,
+                Data = dataModel
+            };
+
+            return results;
+        }
+        else
         {
-            PageNumber = firstRecord.PageNumber,
-            TotalRecords = firstRecord.TotalRecords,
-            TotalPages = firstRecord.TotalPages,
-            PageSize = firstRecord.PageSize
-        };
+            CrewMetaModel meta = new CrewMetaModel
+            {
+                PageNumber = 1,
+                TotalRecords = 0,
+                TotalPages = 0,
+                PageSize = 0
+            };
+            CrewScheduleResultsModel results = new CrewScheduleResultsModel
+            {
+                Meta = meta,
+                Data = dataModel
+            };
 
-        CrewScheduleResultsModel results = new CrewScheduleResultsModel
-        {
-            Meta = meta,
-            Data = dataModel
-        };
-
-        return results;
-
+            return results;
+        }
     }
 }
