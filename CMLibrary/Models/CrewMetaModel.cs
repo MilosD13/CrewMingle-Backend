@@ -1,6 +1,4 @@
-﻿
-
-namespace CMLibrary.Models;
+﻿namespace CMLibrary.Models;
 
 public class CrewMetaModel
 {
@@ -8,5 +6,4 @@ public class CrewMetaModel
     public int TotalPages { get; set; } = int.MaxValue;
     public int PageNumber { get; set; } = 1;
     public int PageSize { get; set; } = int.MaxValue;
-    
 }
