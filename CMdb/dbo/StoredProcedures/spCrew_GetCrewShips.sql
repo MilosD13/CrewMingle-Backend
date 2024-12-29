@@ -33,15 +33,12 @@ BEGIN
 	WITH PaginatedResults AS (
 
 		SELECT 
-		-- uc.[Id],
-		 --[CreatedDate],
-		 [UserAccountId]  [CrewId],
+		[UserAccountId]  [CrewId],
 		 cl.[Cruiseline],
 		 cs.[Ship][ShipName],
 		 [ShipId],
 		 [StartDate],
 		 [EndDate],
-		 --[IsDeleted],
 		 c.DisplayName, c.ProfileImage
 		 ,ROW_NUMBER() OVER (ORDER BY uc.CreatedDate DESC) AS RowNum -- sorting of results
 	 FROM [dbo].[UserContract] uc 
