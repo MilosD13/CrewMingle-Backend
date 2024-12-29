@@ -1,8 +1,6 @@
-﻿
-using Dapper;
+﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using System.Configuration;
 using System.Data;
 namespace CMLibrary.DataAccess;
 

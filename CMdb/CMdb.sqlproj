@@ -90,5 +90,8 @@
     <Build Include="dbo\StoredProcedures\spUserContract_GetAllByUserId.sql" />
     <Build Include="dbo\StoredProcedures\spCrew_GetCrewByShip.sql" />
     <Build Include="dbo\StoredProcedures\spCrew_GetCrewShips.sql" />
+    <Build Include="dbo\StoredProcedures\spCruiseline_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\spCruiseShip_GetAll.sql" />
+    <Build Include="dbo\StoredProcedures\spShipItinerary_GetFlat.sql" />
   </ItemGroup>
 </Project>

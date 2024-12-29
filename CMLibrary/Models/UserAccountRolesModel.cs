@@ -1,6 +1,4 @@
-﻿
-
-namespace CMLibrary.Models;
+﻿namespace CMLibrary.Models;
 
 public class UserAccountRolesModel
 {
