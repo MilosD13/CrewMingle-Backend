@@ -4,9 +4,7 @@ using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 
 namespace CMapi.StartUpConfig;
 
@@ -58,6 +56,7 @@ public static class DependencyInjectionExtensions
         builder.Services.AddScoped<IUserAccountData, UserAccountData>();
         builder.Services.AddScoped<ICrewDataAccess, CrewDataAccess>();
         builder.Services.AddScoped<IUserContractDataAccess, UserContractDataAccess>();
+        builder.Services.AddScoped<IShipDataAccess, ShipDataAccess>();
     }
 
     public static void AddAuthServices(this WebApplicationBuilder builder)
@@ -69,31 +68,12 @@ public static class DependencyInjectionExtensions
                 .Build();
         });
 
-        //builder.Services.AddAuthentication("Bearer")
-        //    .AddJwtBearer(opts =>
-        //    {
-        //        opts.TokenValidationParameters = new()
-        //        {
-        //            ValidateIssuer = true,
-        //            ValidateAudience = true,
-        //            ValidateIssuerSigningKey = true,
-        //            ValidateLifetime = true,
-        //            ClockSkew = TimeSpan.Zero,
-        //            ValidIssuer = builder.Configuration.GetValue<string>("Authentication:Issuer"),
-        //            ValidAudience = builder.Configuration.GetValue<string>("Authentication:Audience"),
-        //            IssuerSigningKey = new SymmetricSecurityKey(
-        //                Encoding.ASCII.GetBytes(
-        //                builder.Configuration.GetValue<string>("Authentication:SecretKey")!))
-        //        };
-        //    });
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = "Firebase";
             options.DefaultChallengeScheme = "Firebase";
         })
             .AddScheme<AuthenticationSchemeOptions, FirebaseAuthenticationHandler>("Firebase", null);
-
-
     }
 
     public static void AddFirebaseServices(this WebApplicationBuilder builder)
@@ -118,10 +98,4 @@ public static class DependencyInjectionExtensions
 
         builder.Services.AddSingleton(firebaseApp);
     }
-
-    //public static void AddHealthCheckServices(this WebApplicationBuilder builder)
-    //{
-    //    builder.Services.AddHealthChecks()
-    //        .AddSqlServer(builder.Configuration.GetConnectionString("Default")!);
-    //}
 }
