@@ -1,6 +1,5 @@
 ﻿using CMLibrary.Models;
 
-
 namespace CMLibrary.DataAccess;
 
 public class UserAccountData : IUserAccountData

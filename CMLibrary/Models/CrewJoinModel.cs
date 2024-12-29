@@ -1,5 +1,4 @@
-﻿
-namespace CMLibrary.Models;
+﻿namespace CMLibrary.Models;
 
 public class CrewJoinModel
 {
@@ -8,6 +7,4 @@ public class CrewJoinModel
     public DateTime LastUpdatedDate { get; set; }
     public Guid? CreatedByCrewId { get; set; }
     public string Status { get; set; } = string.Empty;
-
-    
 }

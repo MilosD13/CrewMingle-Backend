@@ -1,6 +1,4 @@
-﻿
-
-using CMLibrary.Models;
+﻿using CMLibrary.Models;
 
 namespace CMLibrary.DataAccess;
 
