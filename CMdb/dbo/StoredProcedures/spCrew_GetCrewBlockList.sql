@@ -16,7 +16,7 @@ BEGIN
 	FROM [dbo].[CrewJoin] cj
 	LEFT JOIN [dbo].[CrewJoinDetails] cjd ON cjd.CrewJoinId = cj.Id AND cjd.CrewId <> @UserDbId
 	LEFT JOIN [dbo].[CrewJoinDetails] cjdc ON cjdc.CrewJoinId = cj.Id AND cjdc.CrewId = @UserDbId
-	WHERE cj.IsBlocked <> 1 AND cj.IsDeleted <> 1 AND cj.IsActive = 1
+	WHERE cj.IsBlocked = 1
 	AND (cj.CreatedByCrewId = @UserDbId OR cjdc.CrewId = @UserDbId);
 
 	-- Retrieve paginated data
