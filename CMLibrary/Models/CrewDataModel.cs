@@ -7,6 +7,8 @@ public class CrewDataModel
     public string? Email { get; set; } = string.Empty;
     public string? ProfileImage { get; set; } = string.Empty;
     public string? DisplayName { get; set; } = string.Empty;
+    public string? Cruiseline { get; set; } = string.Empty;
+    public string? ShipName { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
 
     public int RowNum { get; set; } = 1;

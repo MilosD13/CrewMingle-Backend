@@ -74,7 +74,7 @@ public class CrewDataAccess : ICrewDataAccess
 
         return results;
     }
-    public async Task<CrewResultsModel> GetSingleActiveCrew(string userId, Guid crewId)
+    public async Task<CrewResultsModel?> GetSingleActiveCrew(string userId, Guid crewId)
     {
         var crew = await _sql.LoadData<CrewDatabaseModel, dynamic>(
             "dbo.spCrew_GetSingleCrew",
@@ -173,6 +173,8 @@ public class CrewDataAccess : ICrewDataAccess
                 Email = crew_data.Email,
                 DisplayName = crew_data.DisplayName,
                 ProfileImage = crew_data.ProfileImage,
+                Cruiseline = crew_data.Cruiseline,
+                ShipName = crew_data.ShipName,
                 Status = crew_data.Status,
                 RowNum = crew_data.RowNum
             };
